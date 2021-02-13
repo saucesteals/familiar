@@ -64,7 +64,7 @@ class Conversations:
 
         full_output = instance.submit_request(prompt)
 
-        response = full_output.choices[0].text.replace("output: ", "").strip()
+        response = full_output.choices[0].text.replace("output:", "").strip()
 
         if not response:
             return "Oops, I couldn't response to that for some reason!"
