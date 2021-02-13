@@ -45,7 +45,8 @@ class Conversations:
             self.conversations[str(member.id)]["history"] = []
 
 
-    def get_response(self, member:discord.Member, prompt:str) -> str:
+    def get_response(self, member:discord.Member, prompt:str, retry:bool=None) -> str:
+        print("Getting a response for", str(member), "(Retrying)" if retry else "")
         if not self.conversations.get(str(member.id)):
             self.create_new_conversation(member)
         
@@ -69,7 +70,11 @@ class Conversations:
         if not response:
             return "Oops, I couldn't response to that for some reason!"
 
-        if response == prompt:
+        if response == prompt or any([response == _response for _response in [convo["bot"] for convo in history]]):
+            
+            if not retry:
+                return self.get_response(member, prompt, True)
+
             self.reset_history(member)
             return "I just fell into a trap :( To save myself, I'll have to wipe all my interactions with you. Goodbye friend."
 
