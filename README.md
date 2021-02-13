@@ -20,7 +20,12 @@
    python/python3 main.py
    ```
 
+### **Usage**
 
+- `!reply [reply]` / `!f [reply]` - send and get a reply from familiar
+- `!reset` / `!r` - reset your cached conversation history 
+
+*Note that the `!` prefix will not work if you've specified a custom one in the `.env` file*
 
 
 ## **Contributing**

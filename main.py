@@ -5,6 +5,7 @@ load_dotenv()
 
 DISCORD_BOT_TOKEN = os.getenv("DISCORD_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+CUSTOM_DISCORD_PREFIX = os.getenv("DISCORD_BOT_PREFIX")
 
-client = FamiliarBot(command_prefix="!", intents=discord.Intents.all(), openai_api_key=OPENAI_API_KEY)
+client = FamiliarBot(command_prefix=CUSTOM_DISCORD_PREFIX if CUSTOM_DISCORD_PREFIX else "!", intents=discord.Intents.all(), openai_api_key=OPENAI_API_KEY)
 client.run(DISCORD_BOT_TOKEN)
