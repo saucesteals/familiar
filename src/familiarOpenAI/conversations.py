@@ -17,7 +17,12 @@ class Conversations:
     
     def get_initial_history(self, member:discord.Member) -> list:
         name = member.nick if member.nick else member.name
-        return [self._new_response(f"Hello, my name is {name}.", f"Nice to meet you {name}!")]
+
+
+        introduction = self._new_response(f"Hello, my name is {name}.", f"Nice to meet you {name}!")
+        question_one = self._new_response(f"How are you?", f"I am doing great, thanks for asking.")
+
+        return [introduction, question_one]
 
     def create_new_conversation(self, member:discord.Member):
         self.conversations[str(member.id)] = {"history": [], "initial":self.get_initial_history(member)}
