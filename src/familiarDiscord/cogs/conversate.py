@@ -7,9 +7,10 @@ class Conversate(commands.Cog, name='Conversation Handlers'):
     @commands.command(aliases=["f"])
     async def reply(self, ctx, *, prompt:str):
         """Get a reply"""
-        reply = self.client.conversations.get_response(ctx.author, prompt)
+        async with ctx.channel.typing():
+            reply = self.client.conversations.get_response(ctx.author, prompt)
 
-        await ctx.reply(reply)
+            await ctx.reply(reply)
 
     @commands.command(aliases=["r"])
     async def reset(self, ctx):
