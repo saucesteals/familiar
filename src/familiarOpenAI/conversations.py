@@ -51,7 +51,7 @@ class Conversations:
 
     def reset_history(self, member:discord.Member) -> None:
         if self.conversations.get(str(member.id)):
-            self.conversations[str(member.id)]["history"] = []
+            self.conversations[str(member.id)]["history"] = self.get_qna()
 
 
     def get_response(self, member:discord.Member, prompt:str, retry:bool=None) -> str:
