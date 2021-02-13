@@ -80,7 +80,7 @@ class Conversations:
         if not response:
             return "Oops, I couldn't response to that for some reason!"
 
-        if response == prompt or any([response == _response for _response in [convo["bot"] for convo in history]]):
+        if response == prompt or response == history[len(history)-1]["bot"]:
             
             if not retry:
                 return self.get_response(member, prompt, True)
