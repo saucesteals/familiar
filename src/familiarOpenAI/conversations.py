@@ -18,14 +18,23 @@ class Conversations:
     def get_initial_history(self, member:discord.Member) -> list:
         name = member.nick if member.nick else member.name
 
-
         introduction = self._new_response(f"Hello, my name is {name}.", f"Nice to meet you {name}!")
-        question_one = self._new_response(f"How are you?", f"I am doing great, thanks for asking.")
 
-        return [introduction, question_one]
+        return [introduction]
+
+    def get_qna(self) -> list:
+        qna = []
+
+        qna.append(self._new_response(f"What is human life expectancy in the United States?", f"Human life expectancy in the United States is 78 years."))
+        qna.append(self._new_response(f"Who was president of the United States in 1955?", f"Dwight D. Eisenhower was president of the United States in 1955."))
+        qna.append(self._new_response(f"What party did he belong to?", f"He belonged to the Republican Party."))
+        qna.append(self._new_response(f"Who was president of the United States before George W. Bush?", f"Bill Clinton was president of the United States before George W. Bush."))
+        qna.append(self._new_response(f"Who won the World Series in 1995?", f"The Atlanta Braves won the World Series in 1995."))
+
+        return qna
 
     def create_new_conversation(self, member:discord.Member):
-        self.conversations[str(member.id)] = {"history": [], "initial":self.get_initial_history(member)}
+        self.conversations[str(member.id)] = {"history": self.get_qna(), "initial":self.get_initial_history(member)}
 
         return self.conversations[str(member.id)]
 
