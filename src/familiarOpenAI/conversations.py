@@ -69,6 +69,10 @@ class Conversations:
         if not response:
             return "Oops, I couldn't response to that for some reason!"
 
+        if response == prompt:
+            self.reset_history(member)
+            return "I just fell into a trap :( To save myself, I'll have to wipe all my interactions with you. Goodbye friend."
+
         self.add_history(member, prompt, response)
         
         return response
