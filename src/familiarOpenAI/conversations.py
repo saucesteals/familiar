@@ -25,6 +25,7 @@ class Conversations:
     def get_qna(self) -> list:
         qna = []
 
+        # From https://github.com/harperreed/gpt3-persona-bot/blob/master/personas/example.json
         qna.append(self._new_response(f"What is human life expectancy in the United States?", f"Human life expectancy in the United States is 78 years."))
         qna.append(self._new_response(f"Who was president of the United States in 1955?", f"Dwight D. Eisenhower was president of the United States in 1955."))
         qna.append(self._new_response(f"What party did he belong to?", f"He belonged to the Republican Party."))
