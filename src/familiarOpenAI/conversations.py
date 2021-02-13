@@ -55,7 +55,7 @@ class Conversations:
             self.conversations[str(member.id)]["history"] = self.get_qna()
 
 
-    def get_response(self, member:discord.Member, prompt:str, retry:bool=None) -> str:
+    def get_response(self, member:discord.Member, prompt:str, retry:bool=False) -> str:
         print("Getting a response for", str(member), "(Retrying)" if retry else "")
         if not self.conversations.get(str(member.id)):
             self.create_new_conversation(member)
@@ -80,7 +80,7 @@ class Conversations:
         if not response:
             return "Oops, I couldn't response to that for some reason!"
 
-        if response == prompt or response == history[len(history)-1]["bot"]:
+        if response == prompt or response == history[len(history)-1]["bot"] :
             
             if not retry:
                 return self.get_response(member, prompt, True)
