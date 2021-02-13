@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from .cogs.conversate import Conversate
 from .cogs.utils import Utils

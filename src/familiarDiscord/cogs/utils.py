@@ -1,5 +1,4 @@
 from discord.ext import commands
-import discord
 import time
 
 class Utils(commands.Cog, name="Getting familiar ready"):

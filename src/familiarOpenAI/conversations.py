@@ -3,7 +3,6 @@ from .gpt import Example
 import openai
 from discord.ext import commands
 import discord
-import os
 
 
 class Conversations:

@@ -1,5 +1,4 @@
 from discord.ext import commands
-import discord
 
 class Conversate(commands.Cog, name='Conversation Handlers'):
     def __init__(self, client:commands.Bot):
