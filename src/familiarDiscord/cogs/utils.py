@@ -1,5 +1,6 @@
 from discord.ext import commands
 import time
+import json
 
 class Utils(commands.Cog, name="Getting familiar ready"):
     def __init__(self, client:commands.Bot):
@@ -28,3 +29,9 @@ class Utils(commands.Cog, name="Getting familiar ready"):
         initial_time = time.time()
         msg = await ctx.send("Calculating...")
         await msg.edit(content=f":ping_pong: Pong! {time.time() - initial_time:.2f}ms")
+
+    @commands.command()
+    async def export(self, ctx):
+        """Export your current conversation history"""
+        history = self.client.conversations.get_history(ctx.author)
+        await ctx.reply(f"```json\n{json.dumps(history, indent=4)}```")
