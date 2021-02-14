@@ -1,12 +1,14 @@
 from discord.ext import commands
+import logging
+from ..logger import CustomFormatter
 from .cogs.conversate import Conversate
 from .cogs.utils import Utils
 from ..familiarOpenAI.conversations import Conversations
 
+
 class FamiliarBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
 
         openai_api_key = kwargs.get("openai_api_key")
         openai_engine = kwargs.get("openai_engine")
@@ -17,6 +19,16 @@ class FamiliarBot(commands.Bot):
         if not openai_engine:
             openai_engine = "davinci"
 
+        self.logger = logging.getLogger("familiar")
+        ch = logging.StreamHandler()
+        ch.setFormatter(CustomFormatter())
+        self.logger.addHandler(ch)
+
+        if kwargs.get("logging"):
+            self.logger.setLevel(logging.DEBUG)
+        else:
+            self.logger.setLevel(logging.WARNING)
+        
         self._add_cogs()
 
         self.conversations = Conversations(self, openai_api_key, openai_engine)

@@ -8,10 +8,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 CUSTOM_DISCORD_PREFIX = os.getenv("DISCORD_BOT_PREFIX")
 OPENAI_ENGINE = os.getenv("OPENAI_ENGINE")
 
-client = FamiliarBot(command_prefix=CUSTOM_DISCORD_PREFIX if CUSTOM_DISCORD_PREFIX else "!", 
+client = FamiliarBot(command_prefix=CUSTOM_DISCORD_PREFIX.strip() if CUSTOM_DISCORD_PREFIX else "!", 
                      intents=discord.Intents.all(), 
-                     openai_api_key=OPENAI_API_KEY, 
-                     openai_engine=OPENAI_ENGINE
+                     openai_api_key=OPENAI_API_KEY.strip(), 
+                     openai_engine=OPENAI_ENGINE.strip(),
+                     logging=True,
                     )
-                    
+
 client.run(DISCORD_BOT_TOKEN)

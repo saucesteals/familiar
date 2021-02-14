@@ -8,8 +8,20 @@ class Utils(commands.Cog, name="Getting familiar ready"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Logged into Discord as", str(self.client.user))
+        self.client.logger.info("Logged into Discord as " + str(self.client.user))
 
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.CommandNotFound):
+            return
+        elif isinstance(error, commands.CommandOnCooldown):
+            return await ctx.reply(f"Slow down {ctx.author.name}! Please try again in {error.retry_after:.2f}s")
+        elif isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.BadArgument):
+            return await ctx.send_help(ctx.command)
+        elif isinstance(error, commands.CheckFailure):
+            return await ctx.reply("Not allowed")
+        raise error
+    
     @commands.command()
     async def ping(self, ctx):
         """Get the bot's ping"""

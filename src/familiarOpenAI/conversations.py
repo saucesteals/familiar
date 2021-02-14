@@ -57,14 +57,18 @@ class Conversations:
 
 
     def get_response(self, member:discord.Member, prompt:str, retry:bool=False) -> str:
-        print("Getting a response for", str(member), "(Retrying)" if retry else "")
+        if retry:
+            self.client.logger.warning("Retrying to get a response for " + str(member))
+        else:
+            self.client.logger.info("Getting a response for " + str(member))
+
         if not self.conversations.get(str(member.id)):
             self.create_new_conversation(member)
         
         history = self.conversations[str(member.id)]["history"]
         name_history = self.conversations[str(member.id)]["name_history"]
 
-        instance = GPT(temperature=0.75, engine=self.engine, frequency_penalty=0.0, presence_penalty=0.6)
+        instance = GPT(engine=self.engine, frequency_penalty=0.0, presence_penalty=0.6, temperature=0.9)
 
         # Add initial conversation
         for name_conversation in name_history:
@@ -79,6 +83,7 @@ class Conversations:
         response = full_output.choices[0].text.replace("output:", "").strip()
 
         if not response:
+            self.client.logger.warning("Couldn't get a response for " + str(member) + " (Blank response from GPT3)")
             return "Oops, I couldn't response to that for some reason!"
 
         if response == prompt or response == history[len(history)-1]["bot"] :
@@ -87,8 +92,10 @@ class Conversations:
                 return self.get_response(member, prompt, True)
 
             self.reset_history(member)
+            self.client.logger.warning("GPT3 got trapped by " + str(member))
             return "I just fell into a trap :( To save myself, I'll have to wipe all my interactions with you. Goodbye friend."
 
         self.add_history(member, prompt, response)
         
+        self.client.logger.info("Got a response for " + str(member))
         return response
