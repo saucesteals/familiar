@@ -33,7 +33,6 @@ class Conversations:
         qna.append(self._new_response("My day has been alright, thanks for asking!", "Did something happen?"))
         qna.append(self._new_response("No, I just didn't accomplish what I wanted to today.", "Thats okay, there's always tomorrow!"))
         qna.append(self._new_response("You know what? You're right, thanks for telling me that!", f"No problem {name}!"))
-        qna.append(self._new_response(f"I've got to go though, it's been nice talking to you. Goodbye!", f"Goodbye friend!"))
 
         return qna
 
@@ -55,7 +54,7 @@ class Conversations:
 
     def reset_history(self, member:discord.Member) -> None:
         if self.conversations.get(str(member.id)):
-            self.conversations[str(member.id)]["history"] = self.get_qna(member)
+            self.conversations[str(member.id)]["history"] = self.get_initial_history(member)
 
 
     def get_response(self, member:discord.Member, prompt:str, retry:bool=False) -> str:
