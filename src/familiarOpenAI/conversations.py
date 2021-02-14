@@ -6,10 +6,11 @@ import discord
 
 
 class Conversations:
-    def __init__(self, client:commands.Bot, open_ai_key:str):
+    def __init__(self, client:commands.Bot, open_ai_key:str, openai_engine:str="davinci"):
         self.client = client
         self.conversations = {}
         openai.api_key = open_ai_key
+        self.engine = openai_engine
 
     def _new_response(self, prompt:str, response:str) -> dict:
         return {"human":prompt, "bot":response}
@@ -63,7 +64,7 @@ class Conversations:
         history = self.conversations[str(member.id)]["history"]
         initial = self.conversations[str(member.id)]["initial"]
 
-        instance = GPT(temperature=0.75)
+        instance = GPT(temperature=0.75, engine=self.engine)
 
         # Add initial conversation
         for initial_conversation in initial:

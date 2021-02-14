@@ -9,13 +9,17 @@ class FamiliarBot(commands.Bot):
 
 
         openai_api_key = kwargs.get("openai_api_key")
+        openai_engine = kwargs.get("openai_engine")
 
         if not openai_api_key:
             raise Exception("No open_ai_key provided in client")
 
+        if not openai_engine:
+            openai_engine = "davinci"
+
         self._add_cogs()
 
-        self.conversations = Conversations(self, openai_api_key)
+        self.conversations = Conversations(self, openai_api_key, openai_engine)
 
     def _add_cogs(self) -> None:
         self.add_cog(Conversate(self))
