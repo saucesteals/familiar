@@ -12,3 +12,7 @@ def cleanse_prompt(prompt:str, message:discord.Message) -> str:
         prompt = prompt.replace(f"<@&{str(role.id)}>", role.name)
 
     return prompt
+
+
+def get_member_name(member:discord.Member) -> str:
+    return member.nick if member.nick else member.name

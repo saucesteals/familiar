@@ -1,6 +1,7 @@
 """Creates the Example and GPT classes for a user to interface with the OpenAI
 API."""
 
+from re import M
 import openai
 import uuid
 
@@ -45,6 +46,8 @@ class GPT:
     def __init__(self,
                  engine='davinci',
                  temperature=0.5,
+                 frequency_penalty=0.0,
+                 presence_penalty=0.0,
                  max_tokens=100,
                  input_prefix="input: ",
                  input_suffix="\n",
@@ -54,6 +57,8 @@ class GPT:
         self.examples = {}
         self.engine = engine
         self.temperature = temperature
+        self.frequency_penalty = frequency_penalty
+        self.presence_penalty = presence_penalty
         self.max_tokens = max_tokens
         self.input_prefix = input_prefix
         self.input_suffix = input_suffix
@@ -92,6 +97,14 @@ class GPT:
         """Returns the engine specified for the API."""
         return self.engine
 
+    def get_frequency_penalty(self):
+        """Returns the frequency_penalty specified for the API."""
+        return self.frequency_penalty
+
+    def get_presence_penalty(self):
+        """Returns the presence_penalty specified for the API."""
+        return self.presence_penalty
+
     def get_temperature(self):
         """Returns the temperature specified for the API."""
         return self.temperature
@@ -116,6 +129,8 @@ class GPT:
                                             max_tokens=self.get_max_tokens(),
                                             temperature=self.get_temperature(),
                                             top_p=1,
+                                            frequency_penalty=self.get_frequency_penalty(),
+                                            presence_penalty=self.get_presence_penalty(),
                                             n=1,
                                             stream=False,
                                             stop=self.stop)
