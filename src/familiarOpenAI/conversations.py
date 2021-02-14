@@ -22,7 +22,7 @@ class Conversations:
         history = []
 
         history.append(self._new_response("Hello, who are you?", "My name is Familiar. What is your name?"))
-        history.append(self._new_response(f"My name is {name}.", f"Nice to meet you {name}. How can I help you today?"))
+        history.append(self._new_response(f"My name is {name}.", f"Nice to meet you {name}."))
 
         return history
 
