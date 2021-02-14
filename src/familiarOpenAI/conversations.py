@@ -84,7 +84,7 @@ class Conversations:
 
         if not response:
             self.client.logger.warning("Couldn't get a response for " + str(member) + " (Blank response from GPT3)")
-            return "Oops, I couldn't response to that for some reason!"
+            return "Oops, I couldn't respond to that for some reason!"
 
         if response == prompt or response == history[len(history)-1]["bot"] :
             
