@@ -28,7 +28,6 @@ class Conversations:
 
         name = get_member_name(member)
 
-        # From https://github.com/harperreed/gpt3-persona-bot/blob/master/personas/example.json
         qna.append(self._new_response("How has your day been?", "It's been great! How about you?."))
         qna.append(self._new_response("My day has been alright, thanks for asking!", "Did something happen?"))
         qna.append(self._new_response("No, I just didn't accomplish what I wanted to today.", "Thats okay, there's always tomorrow!"))
