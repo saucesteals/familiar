@@ -19,20 +19,18 @@ class Conversations:
     def get_name_history(self, member:discord.Member) -> list:
         name = get_member_name(member)
 
-        introduction = self._new_response(f"Welcome to our discord server, my name is {name}.", f"Nice to meet you {name}!")
+        history = []
 
-        return [introduction]
+        history.append(self._new_response("Hello, who are you?", "My name is Familiar. What is your name?"))
+        history.append(self._new_response(f"My name is {name}.", f"Nice to meet you {name}. How can I help you today?"))
+
+        return history
 
     def get_initial_history(self, member:discord.Member) -> list:
         qna = []
 
-        name = get_member_name(member)
-
-        qna.append(self._new_response("How has your day been?", "It's been great! How about you?."))
-        qna.append(self._new_response("My day has been alright, thanks for asking!", "Did something happen?"))
-        qna.append(self._new_response("No, I just didn't accomplish what I wanted to today.", "Thats okay, there's always tomorrow!"))
-        qna.append(self._new_response("You know what? You're right, thanks for telling me that!", f"No problem {name}!"))
-
+        #name = get_member_name(member)
+        
         return qna
 
     def create_new_conversation(self, member:discord.Member):
@@ -41,10 +39,7 @@ class Conversations:
         return self.conversations[str(member.id)]
 
     def add_history(self, member:discord.Member, prompt:str, response:str) -> None:
-        if not self.conversations.get(str(member.id)):
-            self.create_new_conversation(member)
-
-        if len(self.conversations[str(member.id)]["history"]) > 5:
+        if len(self.get_history(member)) > 5:
             del self.conversations[str(member.id)]["history"][0]
 
         new_response = self._new_response(prompt, response)
@@ -52,23 +47,25 @@ class Conversations:
         self.conversations[str(member.id)]["history"].append(new_response)
 
     def reset_history(self, member:discord.Member) -> None:
-        if self.conversations.get(str(member.id)):
+        if self.has_history(member):
             self.conversations[str(member.id)]["history"] = self.get_initial_history(member)
 
-
-    def get_response(self, member:discord.Member, prompt:str, retry:bool=False) -> str:
-        if retry:
-            self.client.logger.warning("Retrying to get a response for " + str(member))
-        else:
-            self.client.logger.info("Getting a response for " + str(member))
-
+    def ensure_history(self, member) -> None:
         if not self.conversations.get(str(member.id)):
             self.create_new_conversation(member)
+
+    def has_history(self, member) -> bool:
+        return True if self.conversations.get(str(member.id)) else False
+
+    def get_history(self, member) -> dict:
+        self.ensure_history(member)
+        return self.conversations[str(member.id)]["history"]
+
+    def get_customized_gpt(self, member) -> GPT:
+        instance = self.get_gpt()
         
         history = self.conversations[str(member.id)]["history"]
         name_history = self.conversations[str(member.id)]["name_history"]
-
-        instance = GPT(engine=self.engine, frequency_penalty=0.0, presence_penalty=0.6, temperature=0.9)
 
         # Add initial conversation
         for name_conversation in name_history:
@@ -78,15 +75,31 @@ class Conversations:
         for conversation in history:
             instance.add_example(Example(conversation["human"], conversation["bot"]))
 
-        full_output = instance.submit_request(prompt)
+        return instance
 
+    def get_gpt(self):
+        return GPT(engine=self.engine, frequency_penalty=0.0, presence_penalty=0.6, temperature=0.7)
+
+    def get_response(self, member:discord.Member, prompt:str, retry:bool=False) -> str:
+        self.ensure_history(member)
+
+        if retry:
+            self.client.logger.warning("Retrying to get a response for " + str(member))
+        else:
+            self.client.logger.info("Getting a response for " + str(member))
+
+        instance = self.get_customized_gpt(member)
+
+        full_output = instance.submit_request(prompt)
         response = full_output.choices[0].text.replace("output:", "").strip()
 
         if not response:
             self.client.logger.warning("Couldn't get a response for " + str(member) + " (Blank response from GPT3)")
             return "Oops, I couldn't respond to that for some reason!"
 
-        if response == prompt or response == history[len(history)-1]["bot"] :
+        history = self.get_history(member)
+
+        if (response == prompt) or (history and response == history[len(history)-1]["bot"]):
             
             if not retry:
                 return self.get_response(member, prompt, True)

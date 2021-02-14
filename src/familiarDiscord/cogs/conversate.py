@@ -17,10 +17,10 @@ class Conversate(commands.Cog, name='Conversation Handlers'):
         async with ctx.channel.typing():
             try:
                 reply = self.client.conversations.get_response(ctx.author, cleanse_prompt(prompt, ctx.message))
+                return await ctx.reply(reply)
             except Exception as error:
                 self.client.logger.error("At reply command: " + str(error))
-
-            await ctx.reply(reply)
+                await ctx.reply("Oops, something went wrong!")
 
     @commands.command(aliases=["r"])
     async def reset(self, ctx):
