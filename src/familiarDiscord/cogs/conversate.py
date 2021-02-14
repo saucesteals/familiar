@@ -1,4 +1,5 @@
 from discord.ext import commands
+from ..utils import cleanse_prompt
 
 class Conversate(commands.Cog, name='Conversation Handlers'):
     def __init__(self, client:commands.Bot):
@@ -8,7 +9,7 @@ class Conversate(commands.Cog, name='Conversation Handlers'):
     async def reply(self, ctx, *, prompt:str):
         """Get a reply"""
         async with ctx.channel.typing():
-            reply = self.client.conversations.get_response(ctx.author, prompt)
+            reply = self.client.conversations.get_response(ctx.author, cleanse_prompt(prompt, ctx.message))
 
             await ctx.reply(reply)
 
