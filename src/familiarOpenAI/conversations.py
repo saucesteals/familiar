@@ -63,7 +63,7 @@ class Conversations:
         history = self.conversations[str(member.id)]["history"]
         initial = self.conversations[str(member.id)]["initial"]
 
-        instance = GPT()
+        instance = GPT(temperature=0.75)
 
         # Add initial conversation
         for initial_conversation in initial:
