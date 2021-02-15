@@ -27,6 +27,11 @@ class Conversations:
         
         return history
 
+    def set_history(self, member:discord.Member, history:dict) -> None:
+        self.ensure_history(member)
+
+        self.conversations[str(member.id)]["history"] = history
+
     def create_new_conversation(self, member:discord.Member) -> dict:
         self.conversations[str(member.id)] = {"history": self.get_initial_history(member)}
 
