@@ -22,8 +22,8 @@ class Conversations:
         name = get_member_name(member)
         bot_name = get_member_name(member.guild.me)
 
-        history.append(self._new_response("Hello, who are you?", f"My name is {bot_name}. What is your name?"))
-        history.append(self._new_response(f"My name is {name}.", f"Nice to meet you {name}."))
+        history.append(self._new_response(f"Hello, my name is {name}. Who are you?", f"My name is {bot_name}."))
+        history.append(self._new_response(f"How are you?", f"I'm okay, thanks for asking."))
         
         return history
 
