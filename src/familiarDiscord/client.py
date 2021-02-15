@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 import logging
 from ..logger import CustomFormatter
@@ -9,6 +10,9 @@ from ..familiarOpenAI.conversations import Conversations
 class FamiliarBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+
+        self.color = kwargs.get("color", 0xFFF7F5)
 
         openai_api_key = kwargs.get("openai_api_key")
         openai_engine = kwargs.get("openai_engine")
@@ -36,3 +40,7 @@ class FamiliarBot(commands.Bot):
     def _add_cogs(self) -> None:
         self.add_cog(Conversate(self))
         self.add_cog(Utils(self))
+
+    def get_embed(self, *args, **kwargs) -> discord.Embed:
+        kwargs["color"] = self.color
+        return discord.Embed(*args, **kwargs)

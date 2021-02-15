@@ -48,7 +48,7 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
         await ctx.reply(f"Your new history:\n{history_to_str(history, True)}")
 
     def get_creation_embed(self, fake_history:dict) -> discord.Embed:
-        embed = discord.Embed(color=0xFFF7F5, title="Respond with the next response (Prefix with a **-**)")
+        embed = self.client.get_embed(title="Respond with the next response (Prefix with a **-**)")
         embed.description = "Say **STOP** to stop and save until the last finished combination\n"
         embed.description += "Say **BACK** to go back to the previous step\n"
         embed.description += f"Example: `-{random.choice(['Hey!', 'How are you?', 'Whats up?'])}`\n"
