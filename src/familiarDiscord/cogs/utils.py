@@ -44,7 +44,7 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
     async def transfer(self, ctx, member:discord.Member):
         """Transfer someone's current conversation to yours"""
         history = self.client.conversations.get_history(member)
-        self.client.conversations.set_history(ctx.author, [*history])
+        self.client.conversations.set_history(ctx.author, history)
         await ctx.reply(f"Your new history:\n{history_to_str(history, True)}")
 
     def get_creation_embed(self, fake_history:dict) -> discord.Embed:
