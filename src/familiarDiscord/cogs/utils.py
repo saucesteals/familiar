@@ -98,7 +98,7 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
                         del history[len(history) - 1]
                     continue
 
-                fake_history[len(fake_history)-1]["human"] = human_message.content[1:99]
+                fake_history[len(fake_history)-1]["human"] = human_message.content[1:100]
 
             fake_history[len(fake_history)-1]["bot"] = ""
 
@@ -124,9 +124,9 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
                     del history[len(history) - 1]
                 continue
 
-            fake_history[len(fake_history)-1]["bot"] = bot_message.content[1:99]
+            fake_history[len(fake_history)-1]["bot"] = bot_message.content[1:100]
 
-            history.append(self.client.conversations._new_response(human_message.content[1:99], bot_message.content[1:99]))
+            history.append(self.client.conversations._new_response(human_message.content[1:100], bot_message.content[1:100]))
 
 
         if history:
