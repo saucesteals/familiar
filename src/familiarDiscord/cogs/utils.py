@@ -32,7 +32,7 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
         """Get the bot's ping"""
         initial_time = time.time()
         msg = await ctx.send("Calculating...")
-        await msg.edit(content=f":ping_pong: Pong! {time.time() - initial_time:.2f}ms")
+        await msg.edit(content=f":ping_pong: Pong! {time.time() - initial_time:.2f}s")
 
     @commands.command(aliases=["e"])
     async def export(self, ctx, member:discord.Member=None):

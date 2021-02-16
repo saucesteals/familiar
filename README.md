@@ -24,6 +24,10 @@
 
 - `!reply [reply]` / `!f [reply]` - send and get a reply from familiar
 - `!reset` / `!r` - reset your cached conversation history 
+- `!create` / `!c` - allows you to create a customized personality for familiar
+- `!export` - export your current conversation
+- `!transfer` - transfer someone else's current conversation into yours
+- `!ping` - gets familiar's ping to discord
 
 *Note that the `!` prefix will not work if you've specified a custom one in the `.env` file*
 
