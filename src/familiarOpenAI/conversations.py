@@ -84,9 +84,7 @@ class Conversations:
         self.conversations[str(member.id)]["history"].append(new_response)
 
     def reset_history(self, member:discord.Member) -> None:
-        if self.has_history(member):
-            self.conversations[str(member.id)]["history"] = self.get_initial_history(member)
-            self.set_append_new(member, True)
+        self.create_new_conversation(member)
 
     def ensure_history(self, member:discord.Member) -> None:
         if not self.conversations.get(str(member.id)):
