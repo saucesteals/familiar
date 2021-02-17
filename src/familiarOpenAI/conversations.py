@@ -52,9 +52,13 @@ class Conversations:
     def get_member(self, member:discord.Member) -> dict:
         self.ensure_history(member)
         return self.conversations[str(member.id)]
-
+    
     def flip_append_new(self, member:discord.Member) -> None:
         self.conversations[str(member.id)]["append_new"] = not self.get_append_new(member)
+
+    def set_append_new(self, member:discord.Member, new_bool:bool) -> None:
+        self.conversations[str(member.id)]["append_new"] = new_bool
+
 
     def get_append_new(self, member:discord.Member) -> bool:
         return self.get_member(member)["append_new"]
@@ -82,6 +86,7 @@ class Conversations:
     def reset_history(self, member:discord.Member) -> None:
         if self.has_history(member):
             self.conversations[str(member.id)]["history"] = self.get_initial_history(member)
+            self.set_append_new(member, True)
 
     def ensure_history(self, member:discord.Member) -> None:
         if not self.conversations.get(str(member.id)):
