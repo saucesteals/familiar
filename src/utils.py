@@ -17,5 +17,13 @@ def cleanse_prompt(prompt:str, message:discord.Message) -> str:
     return prompt.strip()
 
 def history_to_str(history:dict, append_json_syntax:bool=False) -> str:
-    history_str = json.dumps(history, indent=4)
+    _history = [*history]
+    if append_json_syntax:
+        for converation in _history:
+            if len(converation["human"]) > 100:
+                converation["human"] = converation["human"][:99] + "..."
+            if len(converation["bot"]) > 100:
+                converation["bot"] = converation["bot"][:99] + "..."
+    history_str = json.dumps(_history, indent=4)
+
     return history_str if not append_json_syntax else f"```json\n{history_str}```"
