@@ -2,8 +2,12 @@ import asyncio
 import discord
 from discord.ext import commands
 import time
+import os
+from os.path import isfile, join
 import json
 import random
+
+from discord.ext.commands.core import command
 from ...utils import history_to_str
 
 class Utils(commands.Cog, name="Useful utilities for familiar"):
@@ -39,13 +43,6 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
         """Export yours or another members current conversation history"""
         history = self.client.conversations.get_history(member if member else ctx.author)
         await ctx.reply(history_to_str(history, True))
-
-    @commands.command(aliases=["t"])
-    async def transfer(self, ctx, member:discord.Member):
-        """Transfer someone's current conversation to yours"""
-        history = self.client.conversations.get_history(member)
-        self.client.conversations.set_history(ctx.author, history)
-        await ctx.reply(f"Your new history:\n{history_to_str(history, True)}")
 
     def get_creation_embed(self, fake_history:dict) -> discord.Embed:
         embed = self.client.get_embed(title="Respond with the next response (Prefix with a **-**)")
@@ -135,3 +132,57 @@ class Utils(commands.Cog, name="Useful utilities for familiar"):
 
         else:
             await ctx.reply(f"Invalid or empty history:\n{history_to_str(history, True)}")
+
+    def get_persona(self, filename:str) -> dict:
+        return json.load(open(join(self.client.persona_path, filename)))
+
+    def get_all_persona_filenames(self) -> list:
+        return [_file for _file in os.listdir(self.client.persona_path) if isfile(join(self.client.persona_path, _file))]
+
+    def get_personas_embed(self) -> discord.Embed:
+        embed = self.client.get_embed(title="Persona List")
+        for filename in self.get_all_persona_filenames():
+
+            data = self.get_persona(filename)
+
+            name = data["name"]
+            description = data["description"]
+            embed.add_field(name=name, value=description)
+
+        if not embed.fields:
+            embed.description = "No personas found!"
+
+        return embed
+
+    @commands.command()
+    async def track(self, ctx):
+        """Turn on/off (flip) wether familiar should track your new responses (add them to your history)"""
+        self.client.conversations.flip_append_new(member=ctx.author)
+        await ctx.send("Tracking: " + ("ON" if self.client.conversations.get_append_new(ctx.author) else "OFF"))
+
+    @commands.command(name="set", aliases=["s"])
+    async def _set(self, ctx, persona:str):
+        """Set a custom personality (from the list command) as your current history"""
+        persona = persona.lower()
+        if persona not in [_file.replace(".json", "") for _file in self.get_all_persona_filenames()]:
+            return await ctx.send(content="Invalid persona name!", embed=self.get_personas_embed())
+        
+        data = self.get_persona(persona + ".json")
+
+        self.client.conversations.create_new_conversation(
+            member=ctx.author,
+            history=data["conversation"],
+            frequency_penalty=data["frequency_penalty"],
+            presence_penalty=data["presence_penalty"],
+            temperature=data["temperature"],
+            engine=data["engine"]
+        )
+
+        await ctx.send("Success:\n" + history_to_str(self.client.conversations.get_history(ctx.author), True))
+
+
+
+    @commands.command(name="list", aliases=["l"])
+    async def _list(self, ctx):
+        """Get a list of premade personas"""
+        await ctx.send(embed=self.get_personas_embed())

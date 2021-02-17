@@ -1,0 +1,31 @@
+{
+    "name":"help",
+    "description": "Get an answer to any 'actual question'",
+    "temperature":0,
+    "top_p":0,
+    "frequency_penalty":0.0,
+    "presence_penalty":0.0,
+    "engine":"davinci",
+    "conversation": [
+        {
+            "human":"Who was president of the United States in 1955?",
+            "bot":"Dwight D. Eisenhower was president of the United States in 1955."
+        },
+        {
+            "human":"Which party did he belong to?",
+            "bot":"He belonged to the Republican Party."
+        },
+        {
+            "human":"What is the square root of banana?",
+            "bot":"Unknown"
+        },
+        {
+            "human":"How does a telescope work?",
+            "bot":"Telescopes use lenses or mirrors to focus light and make objects appear closer."
+        },
+        {
+            "human":"Where were the 1992 Olympics held?",
+            "bot":"The 1992 Olympics were held in Barcelona, Spain."
+        }
+    ]
+}

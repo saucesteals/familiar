@@ -11,7 +11,7 @@ class FamiliarBot(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-
+        self.persona_path = kwargs.get("persona_path")
         self.color = kwargs.get("color", 0xFFF7F5)
 
         openai_api_key = kwargs.get("openai_api_key")

@@ -1,7 +1,8 @@
 import os
+import discord
 from discord.ext import commands
 from discord.ext.commands.cooldowns import BucketType
-from ...utils import cleanse_prompt
+from ...utils import cleanse_prompt, history_to_str
 
 reply_cooldown = os.getenv("REPLY_COOLDOWN")
 reply_cooldown = int(reply_cooldown.strip()) if reply_cooldown else 3
@@ -28,3 +29,10 @@ class Conversate(commands.Cog, name='Conversation Handlers'):
         self.client.conversations.reset_history(ctx.author)
 
         await ctx.reply("Successfully reset your history!")
+
+    @commands.command(aliases=["t"])
+    async def transfer(self, ctx, member:discord.Member):
+        """Transfer someone's current conversation to yours"""
+        history = self.client.conversations.get_history(member)
+        self.client.conversations.set_history(ctx.author, history)
+        await ctx.reply(f"Your new history:\n{history_to_str(history, True)}")
