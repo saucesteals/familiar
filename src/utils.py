@@ -20,9 +20,9 @@ def history_to_str(history:dict, append_json_syntax:bool=False) -> str:
     _history = [*history]
     if append_json_syntax:
         for converation in _history:
-            if len(converation["human"]) > 100:
+            if len(converation.get("human", "")) > 100:
                 converation["human"] = converation["human"][:99] + "..."
-            if len(converation["bot"]) > 100:
+            if len(converation.get("bot",  "")) > 100:
                 converation["bot"] = converation["bot"][:99] + "..."
     history_str = json.dumps(_history, indent=4)
 
