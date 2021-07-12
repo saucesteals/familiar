@@ -94,7 +94,7 @@ class Conversations:
         return True if self.conversations.get(str(member.id)) else False
 
     def cleanse_response(self, response:str) -> str:
-        return re.sub("[@<>]|output:", "").strip()
+        return re.sub("[@<>]|output:", "", response).strip()
 
     def get_history(self, member:discord.Member) -> list:
         self.ensure_history(member)
