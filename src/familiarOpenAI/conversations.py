@@ -1,4 +1,4 @@
-from os import name, scandir
+from os import re
 from .gpt import GPT
 from .gpt import Example
 import openai
@@ -94,7 +94,7 @@ class Conversations:
         return True if self.conversations.get(str(member.id)) else False
 
     def cleanse_response(self, response:str) -> str:
-        return response.replace("output:", "").strip().split("\n")[0]
+        return re.sub("[@<>]|output:", "").strip()
 
     def get_history(self, member:discord.Member) -> list:
         self.ensure_history(member)
