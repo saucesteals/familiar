@@ -1,4 +1,4 @@
-from os import re
+import re
 from .gpt import GPT
 from .gpt import Example
 import openai
